@@ -1,0 +1,36 @@
+# docker compose for development
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14.0
+    environment:
+      - POSTGRES_USER=trpc-prisma
+      - POSTGRES_PASSWORD=trpc-prisma
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  app:
+    build:
+      context: ./
+    image: trpc-prisma-starter:latest
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+  prisma-studio:
+    build:
+      context: ./
+    ports:
+      - '5555:5555'
+    volumes:
+      - ./prisma:/app/prisma:delegated
+    command: 'npx prisma studio'
+    depends_on:
+      - app
+      - postgres
+
+volumes:
+  postgres:

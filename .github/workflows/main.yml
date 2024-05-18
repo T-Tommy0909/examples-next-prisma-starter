@@ -3,15 +3,6 @@ on: [push]
 jobs:
   e2e:
     name: 'Build + E2E tests'
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DATABASE: trpc-prisma
-          POSTGRES_USER: trcp-prisma
-          POSTGRES_PASSWORD: trcp-prisma
-        ports:
-          - 5432:5432
     env:
       NODE_ENV: test
       NEXTAUTH_SECRET: supersecret

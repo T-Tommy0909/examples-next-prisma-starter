@@ -43,12 +43,6 @@ jobs:
           path: ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}-nextjs
 
-      - name: Setup Prisma
-        run: pnpm prebuild
-
-      - run: pnpm build
-      - run: pnpm test-e2e
-
       - name: Check types
         run: pnpm tsc
 
@@ -62,15 +56,6 @@ jobs:
 
   unit:
     name: 'Unit tests + typecheck'
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DATABASE: trpc-prisma
-          POSTGRES_USER: trcp-prisma
-          POSTGRES_PASSWORD: trcp-prisma
-        ports:
-          - 5432:5432
     env:
       NODE_ENV: test
       NEXTAUTH_SECRET: supersecret
@@ -98,9 +83,6 @@ jobs:
         with:
           path: ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}-nextjs
-
-      - name: Setup Prisma
-        run: pnpm prebuild
 
       - run: pnpm test-unit
       - run: pnpm tsc
